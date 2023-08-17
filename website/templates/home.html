@@ -3,7 +3,7 @@
 <ul>
     {% for product in products %}
     <li>
-        <img src="{{ product.image_url }}" alt="{{ product.name }}" width="100">
+        <img src="{{ url_for('static', filename='camera.jpg') }}" alt="{{ product.name }}" width="100">
         <br>
         <a href="{{url_for('auth.product_detail', product_id=product.id) }}">{{ product.name }}</a>
         <h6> {{ product.price }}</h6>
