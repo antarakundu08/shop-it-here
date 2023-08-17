@@ -1,4 +1,14 @@
-{% extends "base.html" %}{% block title %}Changed{% endblock %}
+{% extends "base.html" %}{% block title %}Shop It Here{% endblock %}
 {% block content %}
-<h1> This is the home page</h1>
+<ul>
+    {% for product in products %}
+    <li>
+        <img src="{{ product.image_url }}" alt="{{ product.name }}" width="100">
+        <br>
+        <a href="{{url_for('auth.product_detail', product_id=product.id) }}">{{ product.name }}</a>
+        <h6> {{ product.price }}</h6>
+        <br>
+    </li>
+    {% endfor %}
+</ul>
 {% endblock %}

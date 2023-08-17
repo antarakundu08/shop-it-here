@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import User
+from .models import User, Product
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
@@ -61,3 +61,9 @@ def register():
             return redirect(url_for('views.home'))
     return render_template("register.html",user=current_user)
 
+
+
+@auth.route('/product/<int:product_id>')
+def product_detail(product_id):
+    product = Product.query.get(product_id)
+    return render_template("product_detail.html",product=product, user=current_user)
