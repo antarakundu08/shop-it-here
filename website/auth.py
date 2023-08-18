@@ -23,7 +23,6 @@ def login():
         else:
             flash("Email does not exist", category="error")
     data = request.form
-    print(data)
     return render_template("login.html", user=current_user)
 
 @auth.route('/logout')
@@ -63,7 +62,3 @@ def register():
 
 
 
-@auth.route('/product/<int:product_id>')
-def product_detail(product_id):
-    product = Product.query.get(product_id)
-    return render_template("product_detail.html",product=product, user=current_user)
