@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, session, redirect, url_for, flash
+from flask import Blueprint, render_template, session, redirect, url_for, flash, request
 from flask_login import login_user, login_required, logout_user, current_user
 from . import models, db
 from .models import Product, User, CartItem
@@ -38,7 +38,7 @@ def shopping_cart(product_id):
         flash(f'{product.name} has been added to cart successfully!', 'success')
     else:
         flash(f'Error adding product to cart', 'danger')
-    return redirect(url_for('views.home'))
+    return redirect(request.referrer)
 
 @views.route('/mycart')
 def mycart():
@@ -70,16 +70,12 @@ def remove_from_cart(item_id):
             flash('Item not found.', 'danger')
     return redirect(url_for('views.mycart'))
 
-@views.route('/checkout')
-def checkout():
-    if current_user.is_authenticated:
-        return render_template('checkout.html')
 
 @views.route('/remove_one_from_cart/<int:item_id>')
 def remove_one_from_cart(item_id):
     if current_user.is_authenticated:
         user_id = session['_user_id']
-        cart_item = CartItem.query.filter_by
+        cart_item = CartItem.query.filter_by(id=item_id, user_id=user_id).first()
 
         if cart_item:
             if cart_item.quantity > 1:
@@ -93,3 +89,31 @@ def remove_one_from_cart(item_id):
             flash('Item not found in cart.', 'danger')
     
     return redirect(url_for('views.mycart'))
+
+@views.route('/checkout', methods=['GET', 'POST'])
+def checkout():
+    user_id = session['_user_id']
+    user = User.query.get(user_id)
+    cart_item = CartItem.query.filter_by(user_id=user_id).all()
+    total=0
+    product_dict=defaultdict(Product)
+    for item in cart_item:
+        product = Product.query.get(item.product_id)
+        product_dict[item]=product
+        total += product.price*item.quantity
+    
+    if request.method == 'POST':
+        card_number = request.form['card_number']
+        card_expiry = request.form['card_expiry']
+        card_cvv = request.form['card_cvv']
+
+        if card_number == '1234567890123456' and card_expiry == '12/30' and card_cvv == '123':
+            flash('Card information is invalid. Please try again', 'danger')
+        else:
+            for item in cart_item:
+                db.session.delete(item)
+
+            db.session.commit()
+            flash('Payment Successful. Thank you for your order!', 'success')
+            return redirect(url_for('home'))
+    return render_template('checkout.html', cart_item=cart_item, total=total, user=current_user)

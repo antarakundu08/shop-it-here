@@ -96,6 +96,7 @@
                 </form>
               </div>
               <div class="col-md-6 col-lg-4 col-xl-6">
+                <form method="POST">
                 <div class="row">
                   <div class="col-12 col-xl-6">
                     
@@ -106,25 +107,26 @@
                     
 
                     <div class="form-outline mb-4 mb-xl-5">
-                      <label for="">Expiration Date</label>
-                      <input type="text" class="form-control" placeholder="MM/YY" aria-label="MM" aria-describedby="basic-addon1"
-                       size="7" id="exp" minlength="7" maxlength="7">
+                      <label for="card_expiry">Expiration Date</label>
+                      <input type="text" name="card_expiry" class="form-control" placeholder="MM/YY" aria-label="MM" aria-describedby="basic-addon1"
+                       size="7" id="exp" minlength="7" maxlength="7" required>
                     </div>
                   </div>
                   <div class="col-12 col-xl-6">
                     <div class="form-outline mb-4 mb-xl-5">
-                      <label for="card-number">Card Number</label>
-                      <input id="card-number" type="text" class="form-control" placeholder="1111 2222 3333 4444" 
-                      aria-label="Card Holder" aria-describedby="basic-addon1"  minlength="19" maxlength="19" >
+                      <label for="card_number">Card Number</label>
+                      <input id="card_number" name="card_number" type="text" class="form-control" placeholder="1111 2222 3333 4444" 
+                      aria-label="Card Holder" aria-describedby="basic-addon1"  minlength="19" maxlength="19" required >
                     </div>
 
                     <div class="form-outline mb-4 mb-xl-5">
-                      <label for="cvc">CVV</label>
-                      <input id="cvc" type="password" class="form-control" placeholder="&#9679;&#9679;&#9679;"
-                       aria-label="Card Holder" aria-describedby="basic-addon1" size="1" minlength="3" maxlength="3">
+                      <label for="card_cvv">CVV</label>
+                      <input id="card_cvv" name="card_cvv" type="password" class="form-control" placeholder="&#9679;&#9679;&#9679;"
+                       aria-label="Card Holder" aria-describedby="basic-addon1" size="1" minlength="3" maxlength="3" required>
                     </div>
                   </div>
                 </div>
+              </form>
               </div>
               <div class="col-lg-4 col-xl-3">
                 <div class="d-flex justify-content-between" style="font-weight: 500;">
@@ -144,12 +146,12 @@
                   <p class="mb-2">${{total+2.99}}</p>
                 </div>
 
-                <button type="button" class="btn btn-primary btn-block btn-lg">
+                <a href="{{ url_for('views.checkout') }}" type="button" class="btn btn-primary btn-block btn-lg">
                   <div class="d-flex justify-content-between">
                     <span>Checkout</span>
                     <span>${{total+2.99}}</span>
                   </div>
-                </button>
+                </a>
 
               </div>
             </div>
